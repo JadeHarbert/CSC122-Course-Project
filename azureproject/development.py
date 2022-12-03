@@ -1,3 +1,6 @@
+"""
+development.py -    Script that is run when the code is deployed on a development level
+"""
 from pathlib import Path
 import os
 

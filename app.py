@@ -1,3 +1,9 @@
+"""
+app.py -    Course Project for CSC122 that utilizes Flask to create a web server that utilizes a database.
+            The web server is of a convenience store that has a deli. A database is used to display the menu
+Jade Harbert
+CSC 122
+"""
 import os
 
 from flask import Flask, render_template, redirect, url_for
@@ -14,12 +20,6 @@ app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SECRET_KEY'] = 'hard to guess string'
-# dbname = 'final_project'
-# dbhost = 'localhost'
-# dbuser = 'postgres'
-# dbpass = 'michael2001'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://' + dbuser + ':' + dbpass + '@' + dbhost + '/' + dbname
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # WEBSITE_HOSTNAME exists only in production environment
 if 'WEBSITE_HOSTNAME' not in os.environ:
@@ -38,9 +38,7 @@ app.config.update(
 
 bootstrap = Bootstrap(app)
 moment = Moment(app)
-
 db = SQLAlchemy(app)
-
 migrate = Migrate(app, db)
 
 # Association table with items and toppings
@@ -53,7 +51,7 @@ Menus = db.Table('menu',
 # one to many with items
 class Categories(db.Model):
     """
-    Class representing the Categories table in the database
+    Represents the Categories table in the database
     """
     __tablename__ = "categories"
     id = db.Column(db.Integer, primary_key=True)
@@ -66,7 +64,7 @@ class Categories(db.Model):
 # One to many with Menu
 class Items(db.Model):
     """
-    Class representing the Items table in the database
+    Represents the Items table in the database
     """
     __tablename__ = "items"
     id = db.Column(db.Integer, primary_key=True)
@@ -81,7 +79,7 @@ class Items(db.Model):
 # many to many with menu
 class Toppings(db.Model):
     """
-    Class representing the Toppings table in the database
+    Represents the Toppings table in the database
     """
     __tablename__ = "toppings"
     id = db.Column(db.Integer, primary_key=True)
@@ -222,7 +220,7 @@ with app.app_context():
 @app.route('/', methods=['GET'])
 def index():
     """
-    Method that returns index.html for the / URL
+    Returns index.html for the / URL
     :return: index.html
     """
     return render_template('index.html')
@@ -231,7 +229,7 @@ def index():
 @app.route('/about', methods=['GET'])
 def about():
     """
-    Method that returns about.html for the /about URL
+    Returns about.html for the /about URL
     :return: about.html
     """
     return render_template('about.html')
@@ -240,7 +238,7 @@ def about():
 @app.route('/menu', methods=['GET', 'POST'])
 def menu():
     """
-    Method that displays the menu on menu.html for the /menu URL
+    Displays the menu on menu.html for the /menu URL
     :return: menu.html
     """
     form = FilterForm()
@@ -279,7 +277,7 @@ def menu():
 
 class FilterForm(FlaskForm):
     """
-    Form represnting filtering the menu by category
+    Represents filtering the menu by category
     """
     filter = SelectField("Filter by:", choices=['All', 'Burgers', 'Sandwiches', "Salads",
                                                 "Appetizers", "Subs", "Fried Chicken"])
@@ -289,8 +287,8 @@ class FilterForm(FlaskForm):
 @app.route('/contact', methods=['GET'])
 def contact():
     """
-    Method that returns the contact.html for the /contact URL
-    :return: contact.html
+    Returns the contact.html for the /contact URL
+    :return: template with contact.html
     """
     return render_template('contact.html')
 
@@ -298,9 +296,9 @@ def contact():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     """
-    Method that returns admin.html for the /admin URL
+    Returns admin.html for the /admin URL
     Depending on the selection on AdminForm, it returns a redirect for the specified choice
-    :return:
+    :return: template with admin.html and form
     """
     form = AdminForm()
     if form.validate_on_submit():
@@ -315,9 +313,8 @@ def admin():
 @app.route('/admin/add', methods=['GET', 'POST'])
 def add():
     """
-    Method for returning add.html for /admin/add
-    The method is also responsible for getting the categories & toppings and sending them to add.html to be displayed
-    :return: add.html
+    Returning add.html for /admin/add also gets the categories & toppings and sends them to add.html to be displayed
+    :return: render_template(add.html)
     """
     form = AddItemForm()
 
@@ -362,10 +359,8 @@ def add():
 @app.route('/admin/delete', methods=['GET', 'POST'])
 def delete():
     """
-    Method for returning delete.html to /admin/delete
-    The method is also responsible for taking in user input for which item they want to delete
-    It then deletes that item from the database
-    :return: delete.html
+    Takes in user input for which item they want to delete and then deletes that item from the database
+    :return: render_template(delete.html)
     """
     form = DeleteForm()
     item = form.items.data

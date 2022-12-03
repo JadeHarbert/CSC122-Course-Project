@@ -1,3 +1,6 @@
+"""
+production.py -     Script that is run when the code is deployed on a production level
+"""
 import os
 
 # SECURITY WARNING: keep the secret key used in production secret!
